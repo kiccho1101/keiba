@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+# Load dotenv
+export $(egrep -v '^#' .env | xargs)
+
+# Initialize PostgreSQL data
+docker-compose stop postgres
+rm -rf postgres/data
+docker-compose up -d postgres
+
+until docker-compose exec postgres /usr/bin/pg_isready
+do
+  echo "Waiting for PostgreSQL to..."
+  sleep 1
+done
