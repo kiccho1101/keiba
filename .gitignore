@@ -1,2 +1,5 @@
 .env
 postgres/data
+
+scraper/target
+scraper/.vscode
