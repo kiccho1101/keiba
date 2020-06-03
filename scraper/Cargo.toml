@@ -7,7 +7,9 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-futures = "0.3.5"
-reqwest = {version = "0.10.6", features = ["json"]}
-tokio = {version = "0.2.21", features = ["full"]}
-select = "0.4.3"
+futures = "*"
+reqwest = {version = "*", features = ["json"]}
+tokio = {version = "*", features = ["full"]}
+select = "*"
+regex = "*"
+lazy_static = "*"
