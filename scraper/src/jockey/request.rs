@@ -1,3 +1,4 @@
+#[tokio::main]
 pub async fn get_jockey_html(jockey_id: &String) -> Result<String, reqwest::Error> {
     let url = format!("https://db.netkeiba.com/jockey/{}", jockey_id);
     println!("{:?}", url);
