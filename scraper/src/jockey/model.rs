@@ -1,3 +1,4 @@
+use encoding_rs::EUC_JP;
 use select::document::Document;
 use select::predicate::{Class, Name};
 use std::fs::File;
@@ -30,7 +31,13 @@ impl Jockey {
         let res = reqwest::get(&url).await?;
         assert_eq!(res.status(), 200);
 
-        let html = res.text().await?;
+        let body_bytes = res.bytes().await?;
+
+        let (html, _enc, errors) = EUC_JP.decode(&body_bytes);
+        if errors {
+            eprintln!("{:?}", errors);
+        }
+        let html = html.into_owned();
 
         let mut file = File::create("./src/jockey/jockey_scraped.html")
             .expect("could not create jockey_scraped.html");
@@ -66,6 +73,14 @@ impl Jockey {
             weight: weight,
         }
     }
+
+    pub fn from_jockey_id(jockey_id: &String) -> Jockey {
+        let html = match Jockey::get_jockey_html(jockey_id) {
+            Ok(html) => html,
+            Err(e) => panic!(e),
+        };
+        Jockey::from_html(&html)
+    }
 }
 
 #[cfg(test)]
@@ -73,18 +88,25 @@ mod tests {
     use super::*;
 
     #[test]
-    fn from_jockey_id() {
+    fn from_jockey_id_lemaire() {
         let _jockey_id = String::from("05339");
-        let _html = match Jockey::get_jockey_html(&_jockey_id) {
-            Ok(html) => html,
-            Err(e) => panic!(e),
-        };
-        let jockey = Jockey::from_html(&_html);
+        let jockey = Jockey::from_jockey_id(&_jockey_id);
         assert_eq!(jockey.id, "05339");
         assert_eq!(jockey.born, "フランス");
         assert_eq!(jockey.blood_type, "B型");
         assert_eq!(jockey.height, 163);
         assert_eq!(jockey.weight, 53);
+    }
+
+    #[test]
+    fn from_jockey_id_yutaka() {
+        let _jockey_id = String::from("00666");
+        let jockey = Jockey::from_jockey_id(&_jockey_id);
+        assert_eq!(jockey.id, "00666");
+        assert_eq!(jockey.born, "京都府");
+        assert_eq!(jockey.blood_type, "O型");
+        assert_eq!(jockey.height, 170);
+        assert_eq!(jockey.weight, 51);
     }
 
     #[test]

@@ -13,3 +13,4 @@ tokio = {version = "*", features = ["full"]}
 select = "*"
 regex = "*"
 lazy_static = "*"
+encoding_rs = "*"
