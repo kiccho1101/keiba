@@ -3,3 +3,8 @@ postgres/data
 
 scraper/target
 scraper/.vscode
+
+#Added by cargo
+
+/target
+**/*.rs.bk
