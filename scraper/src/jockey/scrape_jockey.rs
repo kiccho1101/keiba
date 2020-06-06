@@ -31,12 +31,21 @@ pub async fn get_jockey_html(jockey_id: &String) -> Result<String, reqwest::Erro
 }
 
 fn get_td(table: select::node::Node, th: &str) -> Option<String> {
-    let tr = table
-        .find(Name("tr"))
-        .find(|n| n.find(Name("th")).nth(0).unwrap().text() == th);
+    let tr = table.find(Name("tr")).find(|n| {
+        n.find(Name("th"))
+            .nth(0)
+            .expect(&format!("couldn't find th '{}'", th))
+            .text()
+            == th
+    });
 
     match tr {
-        Some(tr) => Some(tr.find(Name("td")).nth(0).unwrap().text()),
+        Some(tr) => Some(
+            tr.find(Name("td"))
+                .nth(0)
+                .expect(&format!("couldn't find td '{}'", th))
+                .text(),
+        ),
         None => None,
     }
 }
@@ -47,9 +56,9 @@ pub fn html_to_jockey(html: &str) -> Jockey {
     let id = document
         .find(Name("a"))
         .find(|n| n.text() == "近走成績")
-        .unwrap()
+        .expect("近走成績 is not found")
         .attr("href")
-        .unwrap()
+        .expect("attr 'href' is not found")
         .replace("/jockey/", "")
         .replace("/", "");
 
@@ -57,7 +66,7 @@ pub fn html_to_jockey(html: &str) -> Jockey {
         document
             .find(Attr("id", "db_main_box").descendant(Name("h1")))
             .nth(0)
-            .unwrap()
+            .expect("0th of h1 is not found")
             .text()
             .replace("\n", "")
             .split("\u{a0}")
@@ -74,22 +83,37 @@ pub fn html_to_jockey(html: &str) -> Jockey {
         None => None,
     };
 
-    let table = document.find(Class("race_table_01")).nth(0).unwrap();
+    let mut born: Option<String> = None;
+    let mut blood_type: Option<String> = None;
+    let mut height: Option<i32> = None;
+    let mut weight: Option<i32> = None;
 
-    let born = get_td(table, "出身地");
-    let blood_type = get_td(table, "血液型");
+    let table_node = document.find(Class("race_table_01")).nth(0);
+    if table_node.is_some() {
+        let table = table_node.unwrap();
+        born = get_td(table, "出身地");
+        blood_type = get_td(table, "血液型");
 
-    let height_node = get_td(table, "身長");
-    let height: Option<i32> = match height_node {
-        Some(node) => Some(node.replace("cm", "").parse().unwrap()),
-        None => None,
-    };
+        let height_node = get_td(table, "身長");
+        height = match height_node {
+            Some(node) => Some(
+                node.replace("cm", "")
+                    .parse()
+                    .expect("failed to parse height"),
+            ),
+            None => None,
+        };
 
-    let weight_node = get_td(table, "体重");
-    let weight: Option<i32> = match weight_node {
-        Some(node) => Some(node.replace("kg", "").parse().unwrap()),
-        None => None,
-    };
+        let weight_node = get_td(table, "体重");
+        weight = match weight_node {
+            Some(node) => Some(
+                node.replace("kg", "")
+                    .parse()
+                    .expect("failed to parse weight"),
+            ),
+            None => None,
+        };
+    }
 
     let jockey = Jockey {
         id: id,
