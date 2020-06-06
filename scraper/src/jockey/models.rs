@@ -1,18 +1,21 @@
+use crate::schema::jockeys;
 use encoding_rs::EUC_JP;
 use select::document::Document;
 use select::predicate::{Class, Name};
 use std::fs::File;
 use std::io::Write;
 
+#[derive(Insertable, Queryable, PartialEq, Debug)]
+#[table_name = "jockeys"]
 pub struct Jockey {
-    pub id: String,
-    pub born: String,
-    pub blood_type: String,
-    pub height: i16,
-    pub weight: i16,
+    id: String,
+    born: String,
+    blood_type: String,
+    height: i32,
+    weight: i32,
 }
 
-fn get_td(table: select::node::Node, th: &str) -> String {
+pub fn get_td(table: select::node::Node, th: &str) -> String {
     table
         .find(Name("tr"))
         .find(|n| n.find(Name("th")).nth(0).unwrap().text() == th)
@@ -46,7 +49,7 @@ impl Jockey {
         Ok(html)
     }
 
-    pub fn from_html(html: &str) -> Jockey {
+    pub fn from_html(html: &str) -> Self {
         let document = Document::from(html);
 
         let id = document
@@ -62,10 +65,10 @@ impl Jockey {
 
         let born = get_td(table, "出身地");
         let blood_type = get_td(table, "血液型");
-        let height: i16 = get_td(table, "身長").replace("cm", "").parse().unwrap();
-        let weight: i16 = get_td(table, "体重").replace("kg", "").parse().unwrap();
+        let height: i32 = get_td(table, "身長").replace("cm", "").parse().unwrap();
+        let weight: i32 = get_td(table, "体重").replace("kg", "").parse().unwrap();
 
-        Jockey {
+        Self {
             id: id,
             born: born,
             blood_type: blood_type,
@@ -74,12 +77,12 @@ impl Jockey {
         }
     }
 
-    pub fn from_jockey_id(jockey_id: &String) -> Jockey {
-        let html = match Jockey::get_jockey_html(jockey_id) {
+    pub fn from_jockey_id(jockey_id: &String) -> Self {
+        let html = match Self::get_jockey_html(jockey_id) {
             Ok(html) => html,
             Err(e) => panic!(e),
         };
-        Jockey::from_html(&html)
+        Self::from_html(&html)
     }
 }
 
