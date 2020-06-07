@@ -5,6 +5,9 @@ scraper/.vscode
 
 keiba/.vscode
 keiba/.mypy_cache
+*.pyc
+
+.DS_Store
 
 #Added by cargo
 
