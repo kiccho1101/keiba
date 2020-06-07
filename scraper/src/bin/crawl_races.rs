@@ -1,9 +1,9 @@
 use scraper::race::model::{upsert_race_results, upsert_races, Race, RaceResult};
-use scraper::race::scrape_race::get_race_html;
+use scraper::race::scrape_race::{get_race_html, race_exists};
 use scraper::race::{scrape_race_calendar, scrape_race_list};
 fn main() {
-    for year in (2000..2021).rev() {
-        for month in 1..13 {
+    for year in (2000..2020).rev() {
+        for month in (1..13).rev() {
             println!("Getting race_ids of {}, {}...", year, month);
             let urls = scrape_race_calendar::get_race_list_urls(year, month);
 
@@ -19,8 +19,13 @@ fn main() {
                         Ok(html) => html,
                         Err(e) => panic!(e),
                     };
-                    races.push(Race::from_html(&race_id, &html));
-                    race_results.extend(RaceResult::from_html(&race_id, &html));
+                    match race_exists(&html) {
+                        true => {
+                            races.push(Race::from_html(&race_id, &html));
+                            race_results.extend(RaceResult::from_html(&race_id, &html));
+                        }
+                        false => (),
+                    }
                 }
                 println!("url {:?} end", url);
 

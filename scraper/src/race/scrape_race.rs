@@ -36,6 +36,21 @@ pub async fn get_race_html(race_id: &String) -> Result<String, reqwest::Error> {
     Ok(html)
 }
 
+pub fn race_exists(html: &str) -> bool {
+    let mut exists = true;
+    let document = Document::from(html);
+    match document
+        .find(Class("racedata").descendant(Name("h1")))
+        .nth(0)
+    {
+        Some(_) => (),
+        None => {
+            exists = false;
+        }
+    }
+    exists
+}
+
 pub fn html_to_race(race_id: &str, html: &str) -> Race {
     let document = Document::from(html);
 

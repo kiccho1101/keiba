@@ -3,6 +3,9 @@ postgres/data
 scraper/target
 scraper/.vscode
 
+keiba/.vscode
+keiba/.mypy_cache
+
 #Added by cargo
 
 /target
