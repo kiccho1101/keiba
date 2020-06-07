@@ -47,7 +47,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn from_jockey_id_lemaire() {
+    fn test_from_jockey_id_lemaire() {
         let _jockey_id = String::from("05339");
         let jockey = Jockey::from_jockey_id(&_jockey_id);
         assert_eq!(jockey.id, "05339");
@@ -58,7 +58,7 @@ mod tests {
     }
 
     #[test]
-    fn from_jockey_id_yutaka() {
+    fn test_from_jockey_id_yutaka() {
         let _jockey_id = String::from("00666");
         let jockey = Jockey::from_jockey_id(&_jockey_id);
         assert_eq!(jockey.id, "00666");
@@ -69,7 +69,7 @@ mod tests {
     }
 
     #[test]
-    fn from_jockey_id_murphy() {
+    fn test_from_jockey_id_murphy() {
         let _jockey_id = String::from("05575");
         let jockey = Jockey::from_jockey_id(&_jockey_id);
         assert_eq!(jockey.id, "05575");
@@ -80,7 +80,7 @@ mod tests {
     }
 
     #[test]
-    fn from_html_file() {
+    fn test_from_html_file() {
         let _html = std::fs::read_to_string("./src/jockey/jockey.html")
             .expect("Unable to read jockey.html");
         let jockey = Jockey::from_html(&_html);

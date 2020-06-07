@@ -1,1 +1,1 @@
-DROP TABLE IF EXISTS jockeys;
+-- DROP TABLE IF EXISTS jockeys;

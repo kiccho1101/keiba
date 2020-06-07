@@ -1,9 +1,8 @@
 use crate::jockey::model::Jockey;
-use dotenv::dotenv;
+use crate::utils::sleep::sleep;
 use encoding_rs::EUC_JP;
 use select::document::Document;
 use select::predicate::{Attr, Class, Name, Predicate};
-use std::{env, thread, time};
 
 #[tokio::main]
 pub async fn get_jockey_html(jockey_id: &String) -> Result<String, reqwest::Error> {
@@ -12,12 +11,7 @@ pub async fn get_jockey_html(jockey_id: &String) -> Result<String, reqwest::Erro
     let res = reqwest::get(&url).await?;
     assert_eq!(res.status(), 200);
 
-    dotenv().ok();
-    let sleep_millisec: u64 = env::var("SLEEP")
-        .expect("SLEEP must be set")
-        .parse()
-        .expect("SLEEP must be integer");
-    thread::sleep(time::Duration::from_millis(sleep_millisec));
+    sleep();
 
     let body_bytes = res.bytes().await?;
 
@@ -70,7 +64,8 @@ pub fn html_to_jockey(html: &str) -> Jockey {
             .text()
             .replace("\n", "")
             .split("\u{a0}")
-            .collect::<Vec<&str>>()[0],
+            .nth(0)
+            .expect("0th of split not found"),
     );
 
     let birthday_node = document
@@ -138,12 +133,7 @@ pub async fn get_jockey_leading_html(year: i32, page: i32) -> Result<String, req
     let res = reqwest::get(&url).await?;
     assert_eq!(res.status(), 200);
 
-    dotenv().ok();
-    let sleep_millisec: u64 = env::var("SLEEP")
-        .expect("SLEEP must be set")
-        .parse()
-        .expect("SLEEP must be integer");
-    thread::sleep(time::Duration::from_millis(sleep_millisec));
+    sleep();
 
     let body_bytes = res.bytes().await?;
 

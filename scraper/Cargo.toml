@@ -16,3 +16,4 @@ lazy_static = "*"
 encoding_rs = "*"
 dotenv = "*"
 diesel = { version = "*", features = ["postgres"] }
+chrono = "*"
