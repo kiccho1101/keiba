@@ -24,7 +24,7 @@ pub async fn get_race_html(race_id: &String) -> Result<String, reqwest::Error> {
     let res = reqwest::get(&url).await?;
     assert_eq!(res.status(), 200);
 
-    // sleep();
+    sleep();
 
     let body_bytes = res.bytes().await?;
 
@@ -36,7 +36,7 @@ pub async fn get_race_html(race_id: &String) -> Result<String, reqwest::Error> {
     Ok(html)
 }
 
-pub fn html_to_race(id: &str, html: &str) -> Race {
+pub fn html_to_race(race_id: &str, html: &str) -> Race {
     let document = Document::from(html);
 
     let name = document
@@ -161,7 +161,7 @@ pub fn html_to_race(id: &str, html: &str) -> Race {
     };
 
     let race = Race {
-        id: String::from(id),
+        id: String::from(race_id),
         name: name,
         race_date: race_date,
         start_time: start_time,
@@ -172,6 +172,5 @@ pub fn html_to_race(id: &str, html: &str) -> Race {
         qualifications: qualifications,
         other_detail: other_detail,
     };
-    println!("{:?}", race);
     race
 }

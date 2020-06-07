@@ -119,7 +119,6 @@ pub fn html_to_jockey(html: &str) -> Jockey {
         height: height,
         weight: weight,
     };
-    println!("{:?}", jockey);
     jockey
 }
 

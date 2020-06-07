@@ -29,7 +29,7 @@ impl Jockey {
     }
 }
 
-pub fn upsert(jockey_data: &Vec<Jockey>) {
+pub fn upsert_jockeys(jockey_data: &Vec<Jockey>) {
     let conn = pg_connection();
     let insert_count = diesel::insert_into(jockeys::table)
         .values(jockey_data)
@@ -37,8 +37,8 @@ pub fn upsert(jockey_data: &Vec<Jockey>) {
         .do_nothing()
         .execute(&conn);
     match insert_count {
-        Ok(count) => println!("{} rows are inserted", count),
-        Err(e) => panic!("{}", e),
+        Ok(count) => println!("jockeys: {} rows are inserted", count),
+        Err(e) => panic!(e),
     }
 }
 

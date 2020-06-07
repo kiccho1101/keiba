@@ -1,4 +1,4 @@
-use scraper::jockey::model::{upsert, Jockey};
+use scraper::jockey::model::{upsert_jockeys, Jockey};
 use scraper::jockey::scrape_jockey_leading;
 fn main() {
     for year in (1956..1980).rev() {
@@ -11,6 +11,6 @@ fn main() {
             .map(|jockey_id| Jockey::from_jockey_id(&jockey_id))
             .collect();
         println!("Upsert data into DB");
-        upsert(&jockey_data);
+        upsert_jockeys(&jockey_data);
     }
 }

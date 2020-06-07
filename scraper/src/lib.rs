@@ -4,6 +4,7 @@ extern crate diesel;
 extern crate chrono;
 extern crate encoding_rs;
 extern crate futures;
+extern crate indicatif;
 extern crate lazy_static;
 extern crate regex;
 extern crate reqwest;
