@@ -31,10 +31,16 @@ fn html_to_race_list_url(html: &str) -> Vec<String> {
     let document = Document::from(html);
     for a in document.find(Class("RaceCellBox").descendant(Name("a"))) {
         match a.attr("href") {
-            Some(href) => race_list_urls.push(format!(
-                "https://race.netkeiba.com/{}",
-                String::from(href).replace("../", "")
-            )),
+            Some(href) => {
+                if String::from(href).contains("https://db.netkeiba.com/race/sum") {
+                    race_list_urls.push(String::from(href))
+                } else {
+                    race_list_urls.push(format!(
+                        "https://race.netkeiba.com/{}",
+                        String::from(href).replace("../", "")
+                    ))
+                }
+            }
             None => (),
         };
     }

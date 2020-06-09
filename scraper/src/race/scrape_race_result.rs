@@ -69,9 +69,11 @@ pub fn html_to_race_result(race_id: &str, html: &str) -> Vec<RaceResult> {
                                                 .unwrap(),
                                             );
                                         } else if th == "斤量" {
-                                            race_result.handicap = Some(td_str.parse().expect(
-                                                &format!("couln't parse handicap: {}", td_str),
-                                            ));
+                                            if td_str != "" {
+                                                race_result.handicap = Some(td_str.parse().expect(
+                                                    &format!("couln't parse handicap: {}", td_str),
+                                                ));
+                                            }
                                         } else if th == "騎手" {
                                             race_result.jockey_name = Some(td_str.replace(" ", ""));
                                             match td.find(Name("a")).nth(0) {
@@ -92,26 +94,32 @@ pub fn html_to_race_result(race_id: &str, html: &str) -> Vec<RaceResult> {
                                         } else if th == "通過" {
                                             race_result.pass_rank = Some(td_str);
                                         } else if th == "上り" {
-                                            race_result.three_furlongs = Some(
-                                                td_str
-                                                    .replace(" ", "")
-                                                    .parse()
-                                                    .expect("failed to parse three_furlongs"),
-                                            );
+                                            if td_str != "" {
+                                                race_result.three_furlongs = Some(
+                                                    td_str
+                                                        .replace(" ", "")
+                                                        .parse()
+                                                        .expect("failed to parse three_furlongs"),
+                                                );
+                                            }
                                         } else if th == "単勝" {
-                                            race_result.ozz = Some(
-                                                td_str
-                                                    .replace(" ", "")
-                                                    .parse()
-                                                    .expect("failed to parse ozz"),
-                                            );
+                                            if td_str != "" {
+                                                race_result.ozz = Some(
+                                                    td_str
+                                                        .replace(" ", "")
+                                                        .parse()
+                                                        .expect("failed to parse ozz"),
+                                                );
+                                            }
                                         } else if th == "人気" {
-                                            race_result.popularity = Some(
-                                                td_str
-                                                    .replace(" ", "")
-                                                    .parse()
-                                                    .expect("failed to parse popularity"),
-                                            );
+                                            if td_str != "" {
+                                                race_result.popularity = Some(
+                                                    td_str
+                                                        .replace(" ", "")
+                                                        .parse()
+                                                        .expect("failed to parse popularity"),
+                                                );
+                                            }
                                         } else if th == "馬体重" {
                                             race_result.horse_weight = Some(td_str);
                                         } else if th == "調教師" {
@@ -142,17 +150,14 @@ pub fn html_to_race_result(race_id: &str, html: &str) -> Vec<RaceResult> {
                                                 None => (),
                                             }
                                         } else if th == "賞金(万円)" {
-                                            match td_str != "" {
-                                                true => {
-                                                    race_result.prize = Some(
-                                                        td.text()
-                                                            .replace(" ", "")
-                                                            .replace(",", "")
-                                                            .parse()
-                                                            .expect("failed to parse prize"),
-                                                    );
-                                                }
-                                                false => (),
+                                            if td_str != "" {
+                                                race_result.prize = Some(
+                                                    td.text()
+                                                        .replace(" ", "")
+                                                        .replace(",", "")
+                                                        .parse()
+                                                        .expect("failed to parse prize"),
+                                                );
                                             }
                                         }
                                     }
