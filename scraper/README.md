@@ -9,6 +9,7 @@ sh bin/start.sh # postgresを起動
 
 cargo install diesel_cli # diesel cliをダウンロード
 
+cd scraper
 diesel migration run # migrationの実行
 ```
 
