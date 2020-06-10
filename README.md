@@ -42,3 +42,9 @@
   - [ ] 生産者
 
 - [ ] Improve model
+
+## Setup
+
+```bash
+sh bin/init.sh
+```
