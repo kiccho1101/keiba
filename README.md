@@ -4,6 +4,7 @@
 ## 目的
 - Rust学びたい
 - rust-cpython使ってみたい
+- 競馬データってオープンソースなのに意外と分析されてない
 - 機械学習学びたい
   - EDA職人の技を真似して盗む
   - Linear model, LightGBM, XGBoost, Catboost, NNなど一通りのモデル試してモデルの気持ちを理解する
