@@ -19,7 +19,7 @@
 - scraper -> Rust
 - machine learning -> python
 - API -> rust-cpython
-- frontend -> React or wasm(Rust学びたいだけ) or Elm
+- frontend -> React / wasm(Rust学びたいだけ) / Elm
 
 ## ロードマップ
 - [x] netkeiba.com scraper
