@@ -26,6 +26,7 @@
   - [x] 騎手
   - [x] レース結果
   - [x] レース
+- [doing] Study Kedro 
 - [ ] EDA
 - [ ] Create CV
 - [ ] Create simple model
