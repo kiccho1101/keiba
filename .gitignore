@@ -1,5 +1,7 @@
 postgres/data
 
+backup
+
 scraper/target
 scraper/.vscode
 
