@@ -1,17 +1,17 @@
 version: "3.6"
 services:
-  postgres:
-      image: postgres:10.5
-      ports:
-        - "${POSTGRES_PORT}:5432"
-      environment:
-        POSTGRES_USER: ${POSTGRES_USERNAME}
-        POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-        POSTGRES_INITDB_ARGS: "--encoding=UTF-8"
-      hostname: ${POSTGRES_PASSWORD}
-      volumes:
-        - ./postgres/init:/docker-entrypoint-initdb.d
-        - ./postgres/data:/var/lib/postgresql/data
+  keiba-db:
+    image: postgres:10.5
+    ports:
+      - "${POSTGRES_PORT}:5432"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USERNAME}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_INITDB_ARGS: "--encoding=UTF-8"
+    hostname: ${POSTGRES_HOSTNAME}
+    volumes:
+      - ./postgres/init:/docker-entrypoint-initdb.d
+      - ./postgres/data:/var/lib/postgresql/data
 
   pgweb:
     image: sosedoff/pgweb
@@ -22,4 +22,39 @@ services:
       AUTH_USER: ${PGWEB_USERNAME}
       AUTH_PASS: ${PGWEB_PASSWORD}
     depends_on:
+      - keiba-db
+
+  postgres:
+    image: postgres:9.6
+    environment:
+      - POSTGRES_USER=airflow
+      - POSTGRES_PASSWORD=airflow
+      - POSTGRES_DB=airflow
+    logging:
+      options:
+        max-size: 10m
+        max-file: "3"
+
+  webserver:
+    image: puckel/docker-airflow:1.10.9
+    restart: always
+    depends_on:
       - postgres
+    environment:
+      - LOAD_EX=n
+      - EXECUTOR=Local
+    logging:
+      options:
+        max-size: 10m
+        max-file: "3"
+    volumes:
+      - ./dags:/usr/local/airflow/dags
+      # - ./plugins:/usr/local/airflow/plugins
+    ports:
+      - "${AIRFLOW_PORT}:8080"
+    command: webserver
+    healthcheck:
+      test: ["CMD-SHELL", "[ -f /usr/local/airflow/airflow-webserver.pid ]"]
+      interval: 30s
+      timeout: 30s
+      retries: 3
