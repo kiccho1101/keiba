@@ -4,8 +4,8 @@ Rustで作ったnetkeiba.comスクレイパー
 
 ## DBのmigration
 ```bash
-cd path/to/keiba
-sh bin/start.sh # postgresを起動
+cd ..
+make start # postgresを起動
 
 cargo install diesel_cli # diesel cliをダウンロード
 
