@@ -1,0 +1,27 @@
+[tool.poetry]
+name = "keiba"
+version = "0.1.0"
+description = ""
+authors = ["kiccho1101 <youodf11khp@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "3.7.4"
+pandas = "^1.1.0"
+numpy = "^1.19.1"
+matplotlib = "^3.3.1"
+scikit-learn = "^0.23.2"
+seaborn = "^0.10.1"
+xgboost = "^1.1.1"
+lightgbm = "^2.3.1"
+jupyter = "^1.0.0"
+jupyterlab = "^2.2.5"
+apache-airflow = "^1.10.11"
+
+[tool.poetry.dev-dependencies]
+flake8 = "^3.8.3"
+mypy = "^0.782"
+black = {version = "^19.10b0", allow-prereleases = true}
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
