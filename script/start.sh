@@ -15,3 +15,6 @@ done
 
 # Start up pgweb
 docker-compose up -d pgweb
+
+# Start up airflow
+docker-compose up -d postgres webserver

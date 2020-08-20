@@ -47,5 +47,11 @@
 ## Setup
 
 ```bash
-sh bin/init.sh
+make init
+```
+
+## Start
+
+```bash
+make start
 ```
